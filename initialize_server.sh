@@ -9,6 +9,6 @@ sudo apt install openssh-server
 #Download and execute DayZ server management script
 #wget -qO - https://github.com/Lsvingen/DayZ_Server_Management/blob/main/dayzserver.sh | bash -s param1 param2 ...
 
-wget -O - https://github.com/Lsvingen/DayZ_Server_Management/blob/main/dayzserver.sh
+wget -O - https://raw.githubusercontent.com/Lsvingen/DayZ_Server_Management/refs/heads/main/dayzserver.sh
 chmod +x ./dayzserver.sh
 bash ./dayzserver.sh
