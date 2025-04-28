@@ -16,7 +16,9 @@ wget -O /opt/dayz_server/dayzserver.sh https://raw.githubusercontent.com/Lsvinge
 wget -O /opt/dayz_server/config.ini https://raw.githubusercontent.com/Lsvingen/DayZ_Server_Management/refs/heads/main/config.ini
 chmod +x /opt/dayz_server/dayzserver.sh
 
-# Create account to use
+# Create account to use, add permisions on folder an kick off script
 # Will fix this later
 sudo useradd -p $(openssl passwd -1 PelicanParty/874) dayz_server_user
+sudo chown -R dayz_server_user /opt/dayz_server/serverfiles/
+
 /bin/su -c "/opt/dayz_server/dayzserver.sh" - dayz_server_user
