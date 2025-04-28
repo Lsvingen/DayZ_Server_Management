@@ -4,8 +4,8 @@
 #############################################
 
 #Enable SSH, restrictions for management are done via NSG from the Terraform deployment
-sudo apt install openssh-server
-sudo apt install lib32gcc-s1
+sudo apt install openssh-server -y
+sudo apt install lib32gcc-s1 -y
 
 #Download and execute DayZ server management script
 #wget -qO - https://github.com/Lsvingen/DayZ_Server_Management/blob/main/dayzserver.sh | bash -s param1 param2 ...
