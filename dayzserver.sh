@@ -264,7 +264,7 @@ fn_console_dayz(){
 fn_install_dayz(){
 	if [ ! -f "${SERVER_PATH}/steamcmd/steamcmd.sh" ]; then
 		mkdir ${SERVER_PATH}/steamcmd &> /dev/null
-		curl -sqL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxf - -C steamcmd
+		curl -sqL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxf - -C "${SERVER_PATH}/steamcmd/"
 		printf "[ ${yellow}STEAM${default} ] Steamcmd installed\n"
 	else
 		printf "[ ${lightblue}STEAM${default} ] Steamcmd already installed\n"
