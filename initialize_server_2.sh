@@ -10,7 +10,7 @@ sudo apt install lib32gcc-s1 -y
 snap install powershell --classic
 
 # Install Powershell modules required for access to keyvault
-powershell -command "install-module Az -Force"
+powershell -command "install-module Az -Force -Confirm:$false"
 
 # Connect Azure Account using System Assigned Managed Identity created during TF deploy
 Connect-AzAccount -Identity
