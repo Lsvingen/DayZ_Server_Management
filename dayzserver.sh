@@ -5,6 +5,23 @@
 ### Modified by haywardgg
 #############################################
 
+############################################################
+# Help - Not in use yet, but might be later if I decide to parameterize this. #
+############################################################
+Help()
+{
+   # Display Help
+   echo "This script accepts arguments on runtime to set certain parameters"
+   echo
+   echo "Syntax: scriptTemplate [-server_path|-branch|-mod_list|-server_mod_list]"
+   echo "options:"
+   echo "server_path     	 Where to store the DayZ server files. Default is /opt/dayz_server/serverfiles/."
+   echo "branch		     	 Which branch to use, either stable or experimental. Default is stable."
+   echo "mod_list	     	 List of mods to use. Default is none."
+   echo "server_mod_list     List of server mods to use. Default is none."
+   echo
+}
+
 ### NO NEED TO EDIT ANYTHING IN THIS FILE ###
 ### Changes should be made in config.ini ###
 
@@ -23,16 +40,25 @@ if [ "${ansi}" != "off" ]; then
         creeol="\r\033[K"
 fi
 
+# Define the config file path
+CONFIG_FILE="/opt/dayz_server/config.ini"
+
 # Define Server folder location
 SERVER_PATH="/opt/dayz_server/serverfiles/"
 
-# Define the config file path
-CONFIG_FILE="/opt/dayz_server/config.ini"
+# Define the branch to run
+BRANCH="223350"
+
+# Define the mod list
+MOD_LIST=""
+
+# Define the server mod list
+SERVER_MOD_LIST="@1828439124"
 
 # Default content of the config.ini file
 DEFAULT_CONFIG="
 # DayZ SteamID
-appid=223350
+appid=${BRANCH}
 dayz_id=221100
 #stable=223350
 #exp_branch=1042420
@@ -56,7 +82,7 @@ discord_webhook_url=\"\"
 # To enable mods, remove the # below and list the Mods like this: \"@mod1;@mod2;@spaces work\". Lowercase only.
 #workshop=\"\"
 # To enable serverside mods, remove the # below and list the Mods like this: \"@servermod1;@server mod2\". Lowercase only.
-#servermods=\"\"
+servermods=\"@1828439124\"
 
 # modify carefully! server won't start if syntax is corrupt!
 dayzparameter=\" -config=\${config} -port=\${port} -freezecheck \${BEpath} \${profiles} \${logs}\""
