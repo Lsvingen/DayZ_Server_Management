@@ -19,8 +19,29 @@ Help()
    echo "branch		     	 Which branch to use, either stable or experimental. Default is stable."
    echo "mod_list	     	 List of mods to use. Default is none."
    echo "server_mod_list     List of server mods to use. Default is none."
+   echo "u      			 Steam username to use."
+   echo "p      			 Steam password to use."
    echo
 }
+
+############################################################
+# Process the input options. Add options as needed.        #
+############################################################
+# Get the options
+while getopts ":hn:" option; do
+   case $option in
+      h) # display Help
+         Help
+         exit;;
+      u) # Enter a username
+         STEAM_USERNAME=$OPTARG;;
+      p) # Enter a password
+         STEAM_PASSWORD=$OPTARG;;
+     \?) # Invalid option
+         echo "Error: Invalid option"
+         exit;;
+   esac
+done
 
 ### NO NEED TO EDIT ANYTHING IN THIS FILE ###
 ### Changes should be made in config.ini ###
@@ -53,7 +74,17 @@ BRANCH="223350"
 MOD_LIST=""
 
 # Define the server mod list
-SERVER_MOD_LIST="@1828439124"
+# CF, VPP Admin Tools
+SERVER_MOD_LIST="@1559212036;@1828439124"
+
+# Define Steam account username from script input args
+STEAM_USERNAME=""
+
+# Define Steam account password from script input args
+STEAM_PASSWORD=""
+
+# Concat username and password for use in script with minimal need to change existing code
+$steamLogin="${STEAM_USERNAME} ${STEAM_PASSWORD}"
 
 # Default content of the config.ini file
 DEFAULT_CONFIG="
@@ -104,9 +135,9 @@ else
 fi
 
 # Check if steamlogin is set to CHANGEME
+# Just overwrite with default config if it is, for now.
 if [ "$steamlogin" = "CHANGEME" ]; then
-	printf "[ ${red}Error${default} ] Please update ${CONFIG_FILE} before running this script again.\n"
-	exit 1
+	echo -e "$DEFAULT_CONFIG" > "$CONFIG_FILE"
 fi
 
 fn_checkroot_dayz(){
