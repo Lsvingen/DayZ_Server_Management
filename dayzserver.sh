@@ -15,7 +15,7 @@ Help()
    echo
    echo "Syntax: scriptTemplate [-server_path|-branch|-mod_list|-server_mod_list]"
    echo "options:"
-   echo "server_path     	 Where to store the DayZ server files. Default is /opt/dayz_server/serverfiles/."
+   echo "server_path     	 Where to store the DayZ server files. Default is /opt/dayz_server/serverfiles"
    echo "branch		     	 Which branch to use, either stable or experimental. Default is stable."
    echo "mod_list	     	 List of mods to use. Default is none."
    echo "server_mod_list     List of server mods to use. Default is none."
@@ -44,7 +44,7 @@ fi
 CONFIG_FILE="/opt/dayz_server/config.ini"
 
 # Define Server folder location
-SERVER_PATH="/opt/dayz_server/serverfiles/"
+SERVER_PATH="/opt/dayz_server/serverfiles"
 
 # Define the branch to run
 BRANCH="223350"
