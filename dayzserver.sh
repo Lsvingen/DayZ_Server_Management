@@ -24,10 +24,10 @@ if [ "${ansi}" != "off" ]; then
 fi
 
 # Define Server folder location
-SERVER_PATH="/opt/dayzserver/serverfiles/"
+SERVER_PATH="/opt/dayz_server/serverfiles/"
 
 # Define the config file path
-CONFIG_FILE="/opt/dayzserver/config.ini"
+CONFIG_FILE="/opt/dayz_server/config.ini"
 
 # Default content of the config.ini file
 DEFAULT_CONFIG="
