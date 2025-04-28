@@ -10,7 +10,7 @@ sudo apt install lib32gcc-s1 -y
 snap install powershell --classic
 
 # Install Powershell modules required for access to keyvault
-powershell -command 'install-module Az -Confirm:$false | Out-Null'
+powershell -command 'install-module Az -Confirm:$false -Force | Out-Null'
 
 # Get Steam Account login details from Azure Key Vault using Managed Identity for use with steamcmd
 SteamUsername=`powershell -command 'Connect-AzAccount -Identity | Out-Null; Get-AzKeyVaultSecret -VaultName "priv-keyvault" -Name "SteamUsername" -AsPlainText'`
