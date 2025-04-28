@@ -13,11 +13,11 @@ snap install powershell --classic
 powershell -command 'install-module Az -Confirm:$false'
 
 # Get Steam Account login details from Azure Key Vault using Managed Identity for use with steamcmd
-SteamUsername=`powershell -command 'Connect-AzAccount -Identity; Get-AzKeyVaultSecret -VaultName "priv-keyvault" -Name "SteamUsername" -AsPlainText'`
-SteamPassword=`powershell -command 'Connect-AzAccount -Identity; Get-AzKeyVaultSecret -VaultName "priv-keyvault" -Name "SteamPassword" -AsPlainText'`
+SteamUsername=`powershell -command 'Connect-AzAccount -Identity | Out-Null; Get-AzKeyVaultSecret -VaultName "priv-keyvault" -Name "SteamUsername" -AsPlainText'`
+SteamPassword=`powershell -command 'Connect-AzAccount -Identity | Out-Null; Get-AzKeyVaultSecret -VaultName "priv-keyvault" -Name "SteamPassword" -AsPlainText'`
 
 # Get password to use for Service Account running the server
-dayz_server_user_password=`powershell -command 'Connect-AzAccount -Identity; Get-AzKeyVaultSecret -VaultName "priv-keyvault" -Name "ServiceAccountPassword" -AsPlainText'`
+dayz_server_user_password=`powershell -command 'Connect-AzAccount -Identity | Out-Null; Get-AzKeyVaultSecret -VaultName "priv-keyvault" -Name "ServiceAccountPassword" -AsPlainText'`
 
 mkdir -m 777 /opt/dayz_server/
 mkdir -m 777 /opt/dayz_server/serverfiles/
