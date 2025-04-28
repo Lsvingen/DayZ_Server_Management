@@ -11,6 +11,7 @@ sudo apt install lib32gcc-s1 -y
 #wget -qO - https://github.com/Lsvingen/DayZ_Server_Management/blob/main/dayzserver.sh | bash -s param1 param2 ...
 
 mkdir -m 777 /opt/dayz_server/
+mkdir -m 777 /opt/dayz_server/serverfiles/
 
 wget -O /opt/dayz_server/dayzserver.sh https://raw.githubusercontent.com/Lsvingen/DayZ_Server_Management/refs/heads/main/dayzserver.sh
 wget -O /opt/dayz_server/config.ini https://raw.githubusercontent.com/Lsvingen/DayZ_Server_Management/refs/heads/main/config.ini
