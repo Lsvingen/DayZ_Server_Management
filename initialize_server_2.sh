@@ -19,4 +19,3 @@ chmod +x /opt/dayz_server/dayzserver.sh
 # Will fix this later
 sudo useradd -p $(openssl passwd -1 PelicanParty/874) dayz_server_user
 /bin/su -c "/opt/dayz_server/dayzserver.sh" - dayz_server_user
-bash /opt/dayz_server/dayzserver.sh
