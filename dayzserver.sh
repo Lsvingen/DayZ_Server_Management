@@ -82,7 +82,7 @@ discord_webhook_url=\"\"
 # To enable mods, remove the # below and list the Mods like this: \"@mod1;@mod2;@spaces work\". Lowercase only.
 #workshop=\"\"
 # To enable serverside mods, remove the # below and list the Mods like this: \"@servermod1;@server mod2\". Lowercase only.
-servermods=\"@1828439124\"
+servermods=\"@1559212036;@1828439124\"
 
 # modify carefully! server won't start if syntax is corrupt!
 dayzparameter=\" -config=\${config} -port=\${port} -freezecheck \${BEpath} \${profiles} \${logs}\""
