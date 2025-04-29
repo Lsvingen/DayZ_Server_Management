@@ -7,7 +7,9 @@
 # Install dependencies
 sudo apt install openssh-server -y
 sudo apt install lib32gcc-s1 -y
-#snap install powershell --classic
+snap install powershell --classic
+
+sleep 10
 
 # Install Powershell modules required for access to keyvault
 `pwsh -command 'install-module Az -Confirm:$false -Force | Out-Null'`
