@@ -134,9 +134,13 @@ else
     chmod 600 "$CONFIG_FILE"
 fi
 
-# Check if steamlogin is set to CHANGEME
+# Check if steamlogin is set to CHANGEME or anonymous
 # Just overwrite with default config if it is, for now.
 if [ "$steamlogin" = "CHANGEME" ]; then
+	echo -e "$DEFAULT_CONFIG" > "$CONFIG_FILE"
+fi
+
+if [ "$steamlogin" = "anonymous" ]; then
 	echo -e "$DEFAULT_CONFIG" > "$CONFIG_FILE"
 fi
 
