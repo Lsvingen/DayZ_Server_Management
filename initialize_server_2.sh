@@ -12,7 +12,8 @@ snap install powershell --classic
 sleep 10
 
 # Install Powershell modules required for access to keyvault
-`pwsh -command 'install-module Az -Confirm:$false -Force | Out-Null'`
+TrustPSRepo=`pwsh -command 'Set-PSRepository -Name PSGallery -InstallationPolicy Trusted'
+InstallModule=`pwsh -command 'install-module Az -Confirm:$false -Force'`
 
 # Get Steam Account login details from Azure Key Vault using Managed Identity for use with steamcmd
 SteamUsername=`pwsh -command 'Connect-AzAccount -Identity | Out-Null; Get-AzKeyVaultSecret -VaultName "priv-keyvault" -Name "SteamUsername" -AsPlainText'`
