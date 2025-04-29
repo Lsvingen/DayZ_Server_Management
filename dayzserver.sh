@@ -77,19 +77,13 @@ MOD_LIST=""
 # CF, VPP Admin Tools
 SERVER_MOD_LIST="@1559212036;@1828439124"
 
-# Define Steam account username from script input args
-STEAM_USERNAME=""
-
-# Define Steam account password from script input args
-STEAM_PASSWORD=""
-
 # Concat username and password for use in script with minimal need to change existing code
 $steamLogin="${STEAM_USERNAME} ${STEAM_PASSWORD}"
 
 # Default content of the config.ini file
 DEFAULT_CONFIG="
 # DayZ SteamID
-appid=\"\${BRANCH}\"
+appid=\"\${$BRANCH}\"
 dayz_id=221100
 #stable=223350
 #exp_branch=1042420
