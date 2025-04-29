@@ -7,20 +7,25 @@
 # Install dependencies
 sudo apt install openssh-server -y
 sudo apt install lib32gcc-s1 -y
-snap install powershell --classic
-
-sleep 10
+#snap install powershell --classic
 
 # Install Powershell modules required for access to keyvault
-TrustPSRepo=`pwsh -command 'Set-PSRepository -Name PSGallery -InstallationPolicy Trusted'
-InstallModule=`pwsh -command 'install-module Az -Confirm:$false -Force'`
+#TrustPSRepo=`pwsh -command 'Set-PSRepository -Name PSGallery -InstallationPolicy Trusted'
+#InstallModule=`pwsh -command 'install-module Az -Confirm:$false -Force'`
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
 # Get Steam Account login details from Azure Key Vault using Managed Identity for use with steamcmd
-SteamUsername=`pwsh -command 'Connect-AzAccount -Identity | Out-Null; Get-AzKeyVaultSecret -VaultName "priv-keyvault" -Name "SteamUsername" -AsPlainText'`
-SteamPassword=`pwsh -command 'Connect-AzAccount -Identity | Out-Null; Get-AzKeyVaultSecret -VaultName "priv-keyvault" -Name "SteamPassword" -AsPlainText'`
+#SteamUsername=`pwsh -command 'Connect-AzAccount -Identity | Out-Null; Get-AzKeyVaultSecret -VaultName "priv-keyvault" -Name "SteamUsername" -AsPlainText'`
+#SteamPassword=`pwsh -command 'Connect-AzAccount -Identity | Out-Null; Get-AzKeyVaultSecret -VaultName "priv-keyvault" -Name "SteamPassword" -AsPlainText'`
+
+az login --identity
+
+SteamUsername=`az keyvault secret show --vault-name "priv-keyvault" --name "SteamUsername" --query value | tr -d '"'`
+SteamPassword=`az keyvault secret show --vault-name "priv-keyvault" --name "SteamPassword" --query value | tr -d '"'`
 
 # Get password to use for Service Account running the server
-dayz_server_user_password=`pwsh -command 'Connect-AzAccount -Identity | Out-Null; Get-AzKeyVaultSecret -VaultName "priv-keyvault" -Name "ServiceAccountPassword" -AsPlainText'`
+dayz_server_user_password=`az keyvault secret show --vault-name "priv-keyvault" --name "ServiceAccountPassword" --query value | tr -d '"'`
+#dayz_server_user_password=`pwsh -command 'Connect-AzAccount -Identity | Out-Null; Get-AzKeyVaultSecret -VaultName "priv-keyvault" -Name "ServiceAccountPassword" -AsPlainText'`
 
 mkdir -m 777 /opt/dayz_server/
 mkdir -m 777 /opt/dayz_server/serverfiles/
