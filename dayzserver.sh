@@ -112,7 +112,7 @@ servermods=\"@1559212036;@1828439124\"
 # modify carefully! server won't start if syntax is corrupt!
 dayzparameter=\" -config=\${config} -port=\${port} -freezecheck \${BEpath} \${profiles} \${logs}\""
 
-# Check if the config.ini file exists
+# Check if the config.ini file exists.
 if [ ! -f "$CONFIG_FILE" ]; then
     printf "[ ${yellow}Warning${default} ] ${CONFIG_FILE} file not found.\n"
     echo -e "$DEFAULT_CONFIG" > "$CONFIG_FILE"
