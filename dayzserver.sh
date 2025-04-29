@@ -76,6 +76,7 @@ profiles=\"-profiles=$SERVER_PATH/serverprofile/\"
 
 # Discord Notifications.
 discord_webhook_url=\"\"
+discord_webhook_admin_url=\"\"
 
 # DayZ Mods from Steam Workshop
 # Edit the workshop.cfg and add one Mod Number per line.
@@ -101,11 +102,14 @@ else
     chmod 600 "$CONFIG_FILE"
 fi
 
-# Check if steamlogin is set to blank
-# Just overwrite with default config if it is, for now.
-if [ "$steamloginuser" = "" ]; then
-	echo -e "$DEFAULT_CONFIG" > "$CONFIG_FILE"
-fi
+fn_send_admin_login_notification(){
+	# Send Discord Admin login notification if URL is set
+	if [ -n "$discord_webhook_admin_url" ]; then
+		curl -H "Content-Type: application/json" -X POST -d "{\"content\": \"Attempting steamcmd login for account '$STEAM_USERNAME', please check Steam Guard.\"}" "$discord_webhook_admin_url"
+	else
+		echo "Discord webhook URL is not set. Skipping notification for login"
+	fi
+}
 
 fn_checkroot_dayz(){
 	if [ "$(whoami)" == "root" ]; then
@@ -279,6 +283,7 @@ fn_install_dayz(){
 }
 
 fn_runupdate_dayz(){
+	fn_send_admin_login_notification
 	${SERVER_PATH}/steamcmd/steamcmd.sh +force_install_dir ${SERVER_PATH}/serverfiles +login "${steamloginuser}" "${steamloginpassword}"  +app_update "${appid}" +quit
 }
 
@@ -293,6 +298,7 @@ fn_update_dayz(){
 		sleep 1
 	fi
 	# check for new build
+	fn_send_admin_login_notification
 	availablebuild=$(${SERVER_PATH}/steamcmd/steamcmd.sh +login "${steamloginuser}" "${steamloginpassword}" +app_info_update 1 +app_info_print "${appid}" +app_info_print "${appid}" +quit | sed -n '/branch/,$p' | grep -m 1 buildid | tr -cd '[:digit:]')
 	if [ -z "${availablebuild}" ]; then
 		printf "\r[ ${red}FAIL${default} ] Checking for update: SteamCMD\n"
@@ -342,6 +348,7 @@ fn_update_dayz(){
 }
 
 fn_runvalidate_dayz(){
+	fn_send_admin_login_notification
 	${SERVER_PATH}/steamcmd/steamcmd.sh +force_install_dir ${SERVER_PATH}/serverfiles +login "${steamloginuser}" "${steamloginpassword}" +app_update "${appid}" validate +quit
 }
 
@@ -389,6 +396,7 @@ fn_workshop_mods(){
     done
 
     # Download mods
+	fn_send_admin_login_notification
     ${SERVER_PATH}/steamcmd/steamcmd.sh +force_install_dir ${SERVER_PATH}/serverfiles +login "${steamloginuser}" "${steamloginpassword}" ${workshoplist} +quit
 
     # Link mods and check for updates
