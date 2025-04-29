@@ -27,16 +27,16 @@ SteamPassword=`az keyvault secret show --vault-name "priv-keyvault" --name "Stea
 dayz_server_user_password=`az keyvault secret show --vault-name "priv-keyvault" --name "ServiceAccountPassword" --query value | tr -d '"'`
 #dayz_server_user_password=`pwsh -command 'Connect-AzAccount -Identity | Out-Null; Get-AzKeyVaultSecret -VaultName "priv-keyvault" -Name "ServiceAccountPassword" -AsPlainText'`
 
-mkdir -m 777 /opt/dayz_server/
-mkdir -m 777 /opt/dayz_server/serverfiles/
+sudo mkdir -m 777 /opt/dayz_server/
+sudo mkdir -m 777 /opt/dayz_server/serverfiles/
 
 wget -O /opt/dayz_server/dayzserver.sh https://raw.githubusercontent.com/Lsvingen/DayZ_Server_Management/refs/heads/main/dayzserver.sh
 wget -O /opt/dayz_server/config.ini https://raw.githubusercontent.com/Lsvingen/DayZ_Server_Management/refs/heads/main/config.ini
-chmod +x /opt/dayz_server/dayzserver.sh
+sudo chmod +x /opt/dayz_server/dayzserver.sh
 
 # Create account to use, add permisions on folder an kick off script
 # Will fix this later
-sudo useradd -p $(openssl passwd -1 ${dayz_server_user_password}) dayz_server_user
+sudo useradd -p $(openssl passwd -1 ${dayz_server_user_password}) dayz_server_user -d /home/dayz_server_user
 sudo chown -R dayz_server_user /opt/dayz_server/serverfiles/
 
 # Run script in different context from root
