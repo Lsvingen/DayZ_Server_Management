@@ -89,7 +89,7 @@ $steamLogin="${STEAM_USERNAME} ${STEAM_PASSWORD}"
 # Default content of the config.ini file
 DEFAULT_CONFIG="
 # DayZ SteamID
-appid=${BRANCH}
+appid=\"\${BRANCH}\"
 dayz_id=221100
 #stable=223350
 #exp_branch=1042420
@@ -98,7 +98,7 @@ dayz_id=221100
 port=2301
 
 # IMPORTANT PARAMETERS
-steamlogin=${$steamLogin}
+steamlogin=\"\${$steamLogin}\"
 config=serverDZ.cfg
 BEpath=\"-BEpath=\${SERVER_PATH}/serverfiles/battleye/\"
 profiles=\"-profiles=\${SERVER_PATH}/serverprofile/\"
