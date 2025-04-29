@@ -37,7 +37,7 @@ sudo chmod +x /opt/dayz_server/dayzserver.sh
 # Create account to use, add permisions on folder an kick off script
 # Will fix this later
 sudo useradd -p $(openssl passwd -1 ${dayz_server_user_password}) dayz_server_user -m -d /home/dayz_server_user
-sudo chown -R dayz_server_user /opt/dayz_server/serverfiles/
+sudo chown -R dayz_server_user /opt/dayz_server/
 
 # Run script in different context from root
 /bin/su -c "/opt/dayz_server/dayzserver.sh -u ${SteamUsername} -p ${SteamPassword}" - dayz_server_user

@@ -98,7 +98,7 @@ dayz_id=221100
 port=2301
 
 # IMPORTANT PARAMETERS
-steamlogin=CHANGEME
+steamlogin=${$steamLogin}
 config=serverDZ.cfg
 BEpath=\"-BEpath=\${SERVER_PATH}/serverfiles/battleye/\"
 profiles=\"-profiles=\${SERVER_PATH}/serverprofile/\"
