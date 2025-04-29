@@ -78,7 +78,7 @@ MOD_LIST=""
 SERVER_MOD_LIST="@1559212036;@1828439124"
 
 # Concat username and password for use in script with minimal need to change existing code
-$steamLogin="${STEAM_USERNAME} ${STEAM_PASSWORD}"
+steamLogin="${STEAM_USERNAME} ${STEAM_PASSWORD}"
 
 # Default content of the config.ini file
 DEFAULT_CONFIG="
