@@ -31,7 +31,6 @@ sudo mkdir -m 777 /opt/dayz_server/
 sudo mkdir -m 777 /opt/dayz_server/serverfiles/
 
 wget -O /opt/dayz_server/dayzserver.sh https://raw.githubusercontent.com/Lsvingen/DayZ_Server_Management/refs/heads/main/dayzserver.sh
-wget -O /opt/dayz_server/config.ini https://raw.githubusercontent.com/Lsvingen/DayZ_Server_Management/refs/heads/main/config.ini
 sudo chmod +x /opt/dayz_server/dayzserver.sh
 
 # Create account to use, add permisions on folder an kick off script
