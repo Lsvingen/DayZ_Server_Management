@@ -5,42 +5,16 @@
 ### Modified by haywardgg
 #############################################
 
-############################################################
-# Help - Not in use yet, but might be later if I decide to parameterize this. #
-############################################################
-Help()
-{
-   # Display Help
-   echo "This script accepts arguments on runtime to set certain parameters"
-   echo
-   echo "Syntax: scriptTemplate [-server_path|-branch|-mod_list|-server_mod_list]"
-   echo "options:"
-   echo "server_path     	 Where to store the DayZ server files. Default is /opt/dayz_server/serverfiles"
-   echo "branch		     	 Which branch to use, either stable or experimental. Default is stable."
-   echo "mod_list	     	 List of mods to use. Default is none."
-   echo "server_mod_list     List of server mods to use. Default is none."
-   echo "u      			 Steam username to use."
-   echo "p      			 Steam password to use."
-   echo
-}
+OPTIND=1         # Reset in case getopts has been used previously in the shell.
+u=""
+p=""
 
-############################################################
-# Process the input options. Add options as needed.        #
-############################################################
-# Get the options
-while getopts ":hup:" option; do
-   case $option in
-      h) # display Help
-         Help
-         exit;;
-      u) # Enter a username
-         STEAM_USERNAME=$OPTARG;;
-      p) # Enter a password
-         STEAM_PASSWORD=$OPTARG;;
-     \?) # Invalid option
-         echo "Error: Invalid option"
-         exit;;
-   esac
+while getopts ":u:p:" opt; do
+  case ${opt} in
+    u ) STEAM_USERNAME=$OPTARG;;
+    p ) STEAM_PASSWORD=$OPTARG;;
+    \? ) echo "Usage: script [-u] [-p]";;
+  esac
 done
 
 ### NO NEED TO EDIT ANYTHING IN THIS FILE ###
