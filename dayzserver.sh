@@ -57,7 +57,7 @@ steamLogin="${STEAM_USERNAME} ${STEAM_PASSWORD}"
 # Default content of the config.ini file
 DEFAULT_CONFIG="
 # DayZ SteamID
-appid=\"\${$BRANCH}\"
+appid=\"\${BRANCH}\"
 dayz_id=221100
 #stable=223350
 #exp_branch=1042420
@@ -66,7 +66,8 @@ dayz_id=221100
 port=2301
 
 # IMPORTANT PARAMETERS
-steamlogin=\"\${$steamLogin}\"
+steamloginuser=\"$STEAM_USERNAME\"
+steamloginpassword=\"$STEAM_PASSWORD\"
 config=serverDZ.cfg
 BEpath=\"-BEpath=\${SERVER_PATH}/serverfiles/battleye/\"
 profiles=\"-profiles=\${SERVER_PATH}/serverprofile/\"
@@ -100,13 +101,9 @@ else
     chmod 600 "$CONFIG_FILE"
 fi
 
-# Check if steamlogin is set to CHANGEME or anonymous
+# Check if steamlogin is set to blank
 # Just overwrite with default config if it is, for now.
-if [ "$steamlogin" = "CHANGEME" ]; then
-	echo -e "$DEFAULT_CONFIG" > "$CONFIG_FILE"
-fi
-
-if [ "$steamlogin" = "anonymous" ]; then
+if [ "$steamloginuser" = "" ]; then
 	echo -e "$DEFAULT_CONFIG" > "$CONFIG_FILE"
 fi
 
@@ -282,7 +279,7 @@ fn_install_dayz(){
 }
 
 fn_runupdate_dayz(){
-	${SERVER_PATH}/steamcmd/steamcmd.sh +force_install_dir ${SERVER_PATH}/serverfiles +login "${steamlogin}"  +app_update "${appid}" +quit
+	${SERVER_PATH}/steamcmd/steamcmd.sh +force_install_dir ${SERVER_PATH}/serverfiles +login "${steamloginuser}" "${steamloginpassword}"  +app_update "${appid}" +quit
 }
 
 fn_update_dayz(){
@@ -296,7 +293,7 @@ fn_update_dayz(){
 		sleep 1
 	fi
 	# check for new build
-	availablebuild=$(${SERVER_PATH}/steamcmd/steamcmd.sh +login "${steamlogin}" +app_info_update 1 +app_info_print "${appid}" +app_info_print "${appid}" +quit | sed -n '/branch/,$p' | grep -m 1 buildid | tr -cd '[:digit:]')
+	availablebuild=$(${SERVER_PATH}/steamcmd/steamcmd.sh +login "${steamloginuser}" "${steamloginpassword}" +app_info_update 1 +app_info_print "${appid}" +app_info_print "${appid}" +quit | sed -n '/branch/,$p' | grep -m 1 buildid | tr -cd '[:digit:]')
 	if [ -z "${availablebuild}" ]; then
 		printf "\r[ ${red}FAIL${default} ] Checking for update: SteamCMD\n"
 		sleep 0.5
@@ -345,7 +342,7 @@ fn_update_dayz(){
 }
 
 fn_runvalidate_dayz(){
-	${SERVER_PATH}/steamcmd/steamcmd.sh +force_install_dir ${SERVER_PATH}/serverfiles +login "${steamlogin}" +app_update "${appid}" validate +quit
+	${SERVER_PATH}/steamcmd/steamcmd.sh +force_install_dir ${SERVER_PATH}/serverfiles +login "${steamloginuser}" "${steamloginpassword}" +app_update "${appid}" validate +quit
 }
 
 fn_validate_dayz(){
@@ -392,7 +389,7 @@ fn_workshop_mods(){
     done
 
     # Download mods
-    ${SERVER_PATH}/steamcmd/steamcmd.sh +force_install_dir ${SERVER_PATH}/serverfiles +login "${steamlogin}" ${workshoplist} +quit
+    ${SERVER_PATH}/steamcmd/steamcmd.sh +force_install_dir ${SERVER_PATH}/serverfiles +login "${steamloginuser}" "${steamloginpassword}" ${workshoplist} +quit
 
     # Link mods and check for updates
     for i in "${workshopID[@]}"; do
