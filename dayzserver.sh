@@ -109,6 +109,20 @@ fn_send_admin_login_notification(){
 	fi
 }
 
+fn_get_serverlist_DZSAL(){
+	#pwsh -command "(Invoke-RestMethod -Method Get -Uri 'dayzsalauncher.com/api/v2/launcher/servers/dayz').result.endpoint.ip -contains '108.143.148.177'"
+	serverListRequest=`curl -H "Content-Type: application/json" -X GET "https://dayzsalauncher.com/api/v2/launcher/servers/dayz"`
+}
+
+fn_add_server_DZSAL(){
+	# Send Discord Admin login notification if URL is set
+	if [ -n "$discord_webhook_admin_url" ]; then
+		curl -H "Content-Type: application/json" -X GET "https://dayzsalauncher.com/api/v1/query/108.143.148.177:27016"
+	else
+		echo ""
+	fi
+}
+
 fn_checkroot_dayz(){
 	if [ "$(whoami)" == "root" ]; then
 	  printf "[ ${red}FAIL${default} ] ${yellow}Do NOT run this script as root!\n"
