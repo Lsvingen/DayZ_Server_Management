@@ -51,8 +51,6 @@ MOD_LIST=""
 # CF, VPP Admin Tools
 SERVER_MOD_LIST="@1559212036;@1828439124"
 
-# Concat username and password for use in script with minimal need to change existing code
-steamLogin="${STEAM_USERNAME} ${STEAM_PASSWORD}"
 
 # Default content of the config.ini file
 DEFAULT_CONFIG="
@@ -105,7 +103,7 @@ fi
 fn_send_admin_login_notification(){
 	# Send Discord Admin login notification if URL is set
 	if [ -n "$discord_webhook_admin_url" ]; then
-		curl -H "Content-Type: application/json" -X POST -d "{\"content\": \"Attempting steamcmd login for account '$STEAM_USERNAME', please check Steam Guard.\"}" "$discord_webhook_admin_url"
+		curl -H "Content-Type: application/json" -X POST -d "{\"content\": \"Attempting steamcmd login for account "${steamloginuser}", please check Steam Guard.\"}" "$discord_webhook_admin_url"
 	else
 		echo "Discord webhook URL is not set. Skipping notification for login"
 	fi
@@ -288,6 +286,7 @@ fn_runupdate_dayz(){
 }
 
 fn_update_dayz(){
+	fn_send_admin_login_notification
 	appmanifestfile=${SERVER_PATH}/serverfiles/steamapps/appmanifest_"${appid}".acf
 	printf "[ ... ] Checking for update: SteamCMD"
 	# gets currentbuild
