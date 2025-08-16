@@ -42,6 +42,8 @@ CONFIG_FILE="/opt/dayz_server/config.ini"
 SERVER_PATH="/opt/dayz_server/serverfiles"
 
 # Define the branch to run
+#stable=223350
+#exp_branch=1042420
 BRANCH="223350"
 
 # Define the mod list
