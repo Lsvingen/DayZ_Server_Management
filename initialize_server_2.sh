@@ -61,7 +61,7 @@ KEYVAULT_DELETED_SECRETS=`az keyvault secret list-deleted --vault-name "priv-key
 
 if [[ $KEYVAULT_SECRETS = *AdminAccountPassword* ]]
 then
-	az keyvault secret set --vault-name "priv-keyvault" --name "AdminAccountPassword" --value "Pass.123"
+	az keyvault secret set --vault-name "priv-keyvault" --name "AdminAccountPassword" --value "$ADMIN_PASSWORD"
 elif [[ $KEYVAULT_DELETED_SECRETS = *AdminAccountPassword* ]]
 then
 	az keyvault secret recover --vault-name "priv-keyvault" --name "AdminAccountPassword"
@@ -75,6 +75,9 @@ fi
 sudo mkdir -m 777 /opt/dayz_server/
 sudo mkdir -m 777 /opt/dayz_server/serverfiles/
 
+#Download content
+wget -O /opt/dayz_server/dayzserver.sh https://raw.githubusercontent.com/Lsvingen/DayZ_Server_Management/refs/heads/main/dayzserver.sh
+
 #Create account for the server service account
 sudo useradd -p $(openssl passwd -1 $DAYZ_SERVER_USER_PASSWORD) $SERVICE_USER -m -d /home/$SERVICE_USER
 
@@ -85,9 +88,6 @@ sudo usermod -aG dayz_server $ADMIN_USER
 
 sudo chgrp -R dayz_server /opt/dayz_server/
 sudo chmod -R g+rwX /opt/dayz_server/
-
-#Download content
-wget -O /opt/dayz_server/dayzserver.sh https://raw.githubusercontent.com/Lsvingen/DayZ_Server_Management/refs/heads/main/dayzserver.sh
 
 # Run script in different context from root, as the service user
 /bin/su -c "/opt/dayz_server/dayzserver.sh -a $STEAM_USERNAME -b $STEAM_PASSWORD -c $ADMIN_STEAM_USER_IDS -d $SERVER_MAP -e $SERVER_EDITION -f $SERVER_MODLIST -g $SERVER_IP" - $SERVICE_USER
