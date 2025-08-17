@@ -168,7 +168,7 @@ mission=\"$MISSION\"
 # DayZ Mods from Steam Workshop
 # Edit the workshop.cfg and add one Mod Number per line.
 # To enable mods, remove the # below and list the Mods like this: \"@mod1;@mod2;@spaces work\". Lowercase only.
-#workshop=\"$SERVER_MODLIST\"
+workshop=\"$SERVER_MODLIST\"
 # To enable serverside mods, remove the # below and list the Mods like this: \"@servermod1;@server mod2\". Lowercase only.
 servermods=\"$SERVER_MODLIST\"
 
