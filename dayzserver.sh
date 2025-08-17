@@ -43,6 +43,15 @@ fn_send_admin_login_notification(){
 	fi
 }
 
+fn_send_server_notification(){
+	# Send Discord Admin login notification if URL is set
+	if [ -n "$discord_webhook_url" ]; then
+		curl -H "Content-Type: application/json" -X POST -d "{\"content\": \"Task: $1, Status: $2\"}" "$discord_webhook_url"
+	else
+		echo "Discord webhook URL is not set. Skipping notifications for server tasks"
+	fi
+}
+
 fn_add_vvpadmin_config(){
 # Set VPPAdminTool permissions
 ADMINLIST=${admin_list}
@@ -71,7 +80,9 @@ fn_get_serverlist_DZSAL(){
 
 fn_add_server_DZSAL(){
 	# Send API call to add server to DZSAL if it is provided
+	# TODO - Add check for branch Stable
 	if [ -n "$SERVER_IP" ]; then
+		fn_send_server_notification "DZSAL API Add" "Calling DZSAL API to add server with branch=$appid, mission=$mission, modlist=$modlist, servername=$servername, serverIP=$server_ip"
 		curl -H "Content-Type: application/json" -X GET "https://dayzsalauncher.com/api/v1/query/${server_IP}:27016"
 	else
 		echo ""
@@ -145,6 +156,7 @@ fn_clear_logs(){
 
 
 fn_start_dayz(){
+	fn_send_server_notification "Server start" "Starting server with branch=$appid, mission=$mission, modlist=$modlist, servername=$servername, serverIP=$server_ip"
 	fn_status_dayz
 	if [ "${dayzstatus}" == "1" ]; then
 		printf "[ ${yellow}DayZ${default} ] Server already running.\n"
@@ -166,6 +178,7 @@ fn_start_dayz(){
 }
 
 fn_stop_dayz(){
+	fn_send_server_notification "Server stop" "Stopping server with branch=$appid, mission=$mission, modlist=$modlist, servername=$servername, serverIP=$server_ip"
 	fn_status_dayz
 	if [ "${dayzstatus}" == "1" ]; then
 		printf "[ ${magenta}...${default} ] Stopping Server graceful."
@@ -231,6 +244,7 @@ fn_console_dayz(){
 
 
 fn_install_dayz(){
+	fn_send_server_notification "Server install" "Running server installs on branch=$appid, mission=$mission, modlist=$modlist, servername=$servername, serverIP=$server_ip"
 	if [ ! -f "${SERVER_PATH}/steamcmd/steamcmd.sh" ]; then
 		mkdir ${SERVER_PATH}/steamcmd &> /dev/null
 		curl -sqL "https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz" | tar zxf - -C "${SERVER_PATH}/steamcmd/"
@@ -334,6 +348,7 @@ fn_validate_dayz(){
 }
 
 fn_workshop_mods(){
+	fn_send_server_notification "Downloading mods" "Downloading mods for server with branch=$appid, mission=$mission, modlist=$modlist, servername=$servername, serverIP=$server_ip"
     declare -a workshopID
     workshopfolder="${SERVER_PATH}/serverfiles/steamapps/workshop/content/221100"
     workshoplist=""

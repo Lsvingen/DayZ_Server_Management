@@ -18,7 +18,7 @@ while getopts ":A:B:C:D:E:F:G:H:" opt; do
   case ${opt} in
     A ) SERVICE_USER=$OPTARG;;
     B ) ADMIN_USER=$OPTARG;;
-    C ) ADMIN__STEAM_USER_IDS=$OPTARG;;
+    C ) ADMIN_STEAM_USER_IDS=$OPTARG;;
     D ) SERVER_MAP=$OPTARG;;
     E ) SERVER_EDITION=$OPTARG;;
     F ) SERVER_MODLIST=$OPTARG;;
@@ -142,12 +142,15 @@ port=2301
 # Server IP
 server_IP=\"$SERVER_IP\"
 
+# Server name
+server_name="Flotedayrusen"
+
 # Admin info
 admin_list=\"$ADMIN__STEAM_USER_IDS\"
 admin_password=\"$ADMIN_PASSWORD\"
 
 # IMPORTANT PARAMETERS
-steamloginuser=\"$SERVER_DISCORD_WEBHOOK\"
+steamloginuser=\"$STEAM_USERNAME\"
 steamloginpassword=\"$STEAM_PASSWORD\"
 config=serverDZ.cfg
 BEpath=\"-BEpath=$SERVER_PATH/serverfiles/battleye/\"
@@ -156,8 +159,8 @@ profiles=\"-profiles=$SERVER_PATH/serverprofile/\"
 #logs=\"-dologs -adminlog -netlog\"
 
 # Discord Notifications.
-discord_webhook_url=\"$SERVER_DISCORD_WEBHOOK\"
-discord_webhook_admin_url=\"$ADMIN_DISCORD_WEBHOOK\"
+discord_webhook_url=\"$SERVER_WEBHOOK_URL\"
+discord_webhook_admin_url=\"$ADMIN_WEBHOOK_URL\"
 
 # Server map
 mission=\"$MISSION\"
@@ -194,7 +197,7 @@ fi
 grep -rl 'template="dayzOffline.chernarusplus"' $SERVER_PATH/serverDZ.cfg | xargs sed -i "s/template=\"dayzOffline.chernarusplus\"/template=\"$MISSION\"/g"
 
 #Change hostname
-grep -rl '"EXAMPLE NAME"' $SERVER_PATH/serverDZ.cfg | xargs sed -i "s/\"EXAMPLE NAME\"/\"Flotedayrusen\"/g"
+grep -rl '"EXAMPLE NAME"' $SERVER_PATH/serverDZ.cfg | xargs sed -i "s/\"EXAMPLE NAME\"/\"$server_name\"/g"
 
 #Disable 3rd person
 grep -rl 'disable3rdPerson=0' $SERVER_PATH/serverDZ.cfg | xargs sed -i "s/"disable3rdPerson=0"/"disable3rdPerson=1"/g"
