@@ -6,14 +6,24 @@
 #############################################
 
 OPTIND=1         # Reset in case getopts has been used previously in the shell.
-u=""
-p=""
+a=""
+b=""
+c=""
+d=""
+e=""
+f=""
+g=""
 
-while getopts ":u:p:" opt; do
+while getopts ":a:b:c:d:e:f:g:" opt; do
   case ${opt} in
-    u ) STEAM_USERNAME=$OPTARG;;
-    p ) STEAM_PASSWORD=$OPTARG;;
-    \? ) echo "Usage: script [-u] [-p]";;
+    a ) STEAM_USERNAME=$OPTARG;;
+    b ) STEAM_PASSWORD=$OPTARG;;
+	c ) ADMIN__STEAM_USER_IDS=$OPTARG;;
+    d ) SERVER_MAP=$OPTARG;;
+    e ) SERVER_EDITION=$OPTARG;;
+    f ) SERVER_MODLIST=$OPTARG;;
+    g ) SERVER_IP=$OPTARG;;
+    \? ) echo "Usage: script [-a STEAM_USERNAME] [-b STEAM_PASSWORD] [-c ADMIN__STEAM_USER_IDS] [-d SERVER_MAP] [-e SERVER_EDITION] [-f SERVER_MODLIST] [-g SERVER_IP]";;
   esac
 done
 
@@ -41,18 +51,48 @@ CONFIG_FILE="/opt/dayz_server/config.ini"
 # Define Server folder location
 SERVER_PATH="/opt/dayz_server/serverfiles"
 
-# Define the branch to run
+# Variable substitutions/convertions from provisioning script parameters
+
+# Set the branch to run
 #stable=223350
 #exp_branch=1042420
-BRANCH="223350"
+if [[ $SERVER_MAP = "Stable" ]]
+then
+	BRANCH="223350"
+elif [[ $SERVER_MAP = "Experimental" ]]
+then
+	BRANCH="1042420"
+fi
+
+# Set the map to run, if an unexpected value is passed default to Chernarus
+case "$SERVER_MAP" in
+    "Chernarus") MISSION="dayzOffline.chernarusplus";;
+    "Livonia") MISSION="dayzOffline.enoch";;
+	"Sakhal") MISSION="dayzOffline.sakhal";;
+    *) MISSION="dayzOffline.chernarusplus";;
+esac
+
+# Set VPPAdminTool permissions
+ADMINLIST_DELIM=";"
+ADMINLIST_OUTPUTFILE="/profiles/VPPAdminTools/Permissions/SuperAdmins/SuperAdmins.txt"
+ADMINLIST_PASSWORDFILE="/profiles/VPPAdminTools/Permissions/Credentials.txt"
+
+# Save original IFS
+OIFS=$IFS
+# Set IFS to the delimiter
+IFS=$ADMINLIST_DELIM
+
+# Split the string and loop through parts
+#for part in $ADMIN__STEAM_USER_IDS; do
+#    echo "$part" >> "$ADMINLIST_OUTPUTFILE"
+#done
+
+# Restore IFS
+IFS=$OIFS
+
 
 # Define the mod list
 MOD_LIST=""
-
-# Define the server mod list
-# CF, VPP Admin Tools
-SERVER_MOD_LIST="@1559212036;@1828439124"
-
 
 # Default content of the config.ini file
 DEFAULT_CONFIG="
@@ -83,7 +123,7 @@ discord_webhook_admin_url=\"\"
 # To enable mods, remove the # below and list the Mods like this: \"@mod1;@mod2;@spaces work\". Lowercase only.
 #workshop=\"\"
 # To enable serverside mods, remove the # below and list the Mods like this: \"@servermod1;@server mod2\". Lowercase only.
-servermods=\"@1559212036;@1828439124\"
+servermods=\"$SERVER_MODLIST\"
 
 # modify carefully! server won't start if syntax is corrupt!
 dayzparameter=\" -config=\${config} -port=\${port} -freezecheck \${BEpath} \${profiles} \${logs}\""
@@ -117,9 +157,9 @@ fn_get_serverlist_DZSAL(){
 }
 
 fn_add_server_DZSAL(){
-	# Send Discord Admin login notification if URL is set
-	if [ -n "$discord_webhook_admin_url" ]; then
-		curl -H "Content-Type: application/json" -X GET "https://dayzsalauncher.com/api/v1/query/108.143.148.177:27016"
+	# Send API call to add server to DZSAL if it is provided
+	if [ -n "$SERVER_IP" ]; then
+		curl -H "Content-Type: application/json" -X GET "https://dayzsalauncher.com/api/v1/query/$SERVER_IP:27016"
 	else
 		echo ""
 	fi
