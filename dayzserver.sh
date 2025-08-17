@@ -6,24 +6,24 @@
 #############################################
 
 OPTIND=1         # Reset in case getopts has been used previously in the shell.
-a=""
-b=""
-c=""
-d=""
-e=""
-f=""
-g=""
+A=""
+B=""
+C=""
+D=""
+E=""
+F=""
+G=""
 
-while getopts ":a:b:c:d:e:f:g:" opt; do
+while getopts ":A:B:C:D:E:F:G:" opt; do
   case ${opt} in
-    a ) STEAM_USERNAME=$OPTARG;;
-    b ) STEAM_PASSWORD=$OPTARG;;
-	c ) ADMIN__STEAM_USER_IDS=$OPTARG;;
-    d ) SERVER_MAP=$OPTARG;;
-    e ) SERVER_EDITION=$OPTARG;;
-    f ) SERVER_MODLIST=$OPTARG;;
-    g ) SERVER_IP=$OPTARG;;
-    \? ) echo "Usage: script [-a STEAM_USERNAME] [-b STEAM_PASSWORD] [-c ADMIN__STEAM_USER_IDS] [-d SERVER_MAP] [-e SERVER_EDITION] [-f SERVER_MODLIST] [-g SERVER_IP]";;
+    A ) STEAM_USERNAME=$OPTARG;;
+    B ) STEAM_PASSWORD=$OPTARG;;
+	C ) ADMIN__STEAM_USER_IDS=$OPTARG;;
+    D ) SERVER_MAP=$OPTARG;;
+    E ) SERVER_EDITION=$OPTARG;;
+    F ) SERVER_MODLIST=$OPTARG;;
+    G ) SERVER_IP=$OPTARG;;
+    \? ) echo "Usage: script [-A STEAM_USERNAME] [-B STEAM_PASSWORD] [-C ADMIN__STEAM_USER_IDS] [-D SERVER_MAP] [-E SERVER_EDITION] [-F SERVER_MODLIST] [-G SERVER_IP]";;
   esac
 done
 

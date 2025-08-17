@@ -5,26 +5,26 @@
 
 # Get passed params
 OPTIND=1         # Reset in case getopts has been used previously in the shell.
-a=""
-b=""
-c=""
-d=""
-e=""
-f=""
-g=""
-h=""
+A=""
+B=""
+C=""
+D=""
+E=""
+F=""
+G=""
+H=""
 
-while getopts ":a:b:c:d:e:f:g:h:" opt; do
+while getopts ":A:B:C:D:E:F:G:" opt; do
   case ${opt} in
-    a ) SERVICE_USER=$OPTARG;;
-    b ) ADMIN_USER=$OPTARG;;
-    c ) ADMIN__STEAM_USER_IDS=$OPTARG;;
-    d ) SERVER_MAP=$OPTARG;;
-    e ) SERVER_EDITION=$OPTARG;;
-    f ) SERVER_MODLIST=$OPTARG;;
-    g ) SERVER_IP=$OPTARG;;
-    h ) ADMIN_PASSWORD=$OPTARG;;
-    \? ) echo "Usage: script [-a SERVICE_USER] [-b ADMIN_USER] [-c ADMIN__STEAM_USER_IDS] [-d SERVER_MAP] [-e SERVER_EDITION] [-f SERVER_MODLIST] [-g SERVER_IP] [-h ADMIN_PASSWORD]";;
+    A ) SERVICE_USER=$OPTARG;;
+    B ) ADMIN_USER=$OPTARG;;
+    C ) ADMIN__STEAM_USER_IDS=$OPTARG;;
+    D ) SERVER_MAP=$OPTARG;;
+    E ) SERVER_EDITION=$OPTARG;;
+    F ) SERVER_MODLIST=$OPTARG;;
+    G ) SERVER_IP=$OPTARG;;
+    H ) ADMIN_PASSWORD=$OPTARG;;
+    \? ) echo "Usage: script [-A SERVICE_USER] [-B ADMIN_USER] [-C ADMIN__STEAM_USER_IDS] [-D SERVER_MAP] [-E SERVER_EDITION] [-F SERVER_MODLIST] [-G SERVER_IP] [-H ADMIN_PASSWORD]";;
   esac
 done
 
