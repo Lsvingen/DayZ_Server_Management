@@ -92,5 +92,112 @@ sudo usermod -aG dayz_server $ADMIN_USER
 sudo chgrp -R dayz_server /opt/dayz_server/
 sudo chmod -R g+rwxs /opt/dayz_server/
 
-# Run script in different context from root, as the service user
-/bin/su -c "/opt/dayz_server/dayzserver.sh -A $STEAM_USERNAME -B $STEAM_PASSWORD -C $ADMIN_STEAM_USER_IDS -D $SERVER_MAP -E $SERVER_EDITION -F $SERVER_MODLIST -G $SERVER_IP -H $ADMIN_WEBHOOK_URL -I $SERVER_WEBHOOK_URL" - $SERVICE_USER
+#Server config
+# Define the config file path
+CONFIG_FILE="/opt/dayz_server/config.ini"
+
+# Define Server folder location
+SERVER_PATH="/opt/dayz_server/serverfiles"
+
+
+
+# Variable substitutions/convertions from provisioning script parameters
+
+# Set the branch to run
+#stable=223350
+#exp_branch=1042420
+if [[ $SERVER_EDITION = "Stable" ]]
+then
+	BRANCH="223350"
+elif [[ $SERVER_EDITION = "Experimental" ]]
+then
+	BRANCH="1042420"
+fi
+
+# Set the map to run, if an unexpected value is passed default to Chernarus
+case "$SERVER_MAP" in
+    "Chernarus") MISSION="dayzOffline.chernarusplus";;
+    "Livonia") MISSION="dayzOffline.enoch";;
+	  "Sakhal") MISSION="dayzOffline.sakhal";;
+    *) MISSION="dayzOffline.chernarusplus";;
+esac
+
+# Define the mod list
+MOD_LIST=""
+
+# Replace delims in server mod list
+SERVER_MODLIST="${SERVER_MODLIST//:/;}"
+
+# Default content of the config.ini file
+DEFAULT_CONFIG="
+# DayZ SteamID
+appid=\"$BRANCH\"
+dayz_id=221100
+#stable=223350
+#exp_branch=1042420
+
+# Game Port (Not Steam QueryPort. Add/Change that in your serverDZ.cfg file)
+port=2301
+
+# Server IP
+server_IP=\"$SERVER_IP\"
+
+# Admin info
+admin_list=\"$ADMIN__STEAM_USER_IDS\"
+admin_password=\"$ADMIN_PASSWORD\"
+
+# IMPORTANT PARAMETERS
+steamloginuser=\"$SERVER_DISCORD_WEBHOOK\"
+steamloginpassword=\"$STEAM_PASSWORD\"
+config=serverDZ.cfg
+BEpath=\"-BEpath=$SERVER_PATH/serverfiles/battleye/\"
+profiles=\"-profiles=$SERVER_PATH/serverprofile/\"
+# optional - just remove the # to enable
+#logs=\"-dologs -adminlog -netlog\"
+
+# Discord Notifications.
+discord_webhook_url=\"$SERVER_DISCORD_WEBHOOK\"
+discord_webhook_admin_url=\"$ADMIN_DISCORD_WEBHOOK\"
+
+# Server map
+mission=\"$MISSION\"
+
+# DayZ Mods from Steam Workshop
+# Edit the workshop.cfg and add one Mod Number per line.
+# To enable mods, remove the # below and list the Mods like this: \"@mod1;@mod2;@spaces work\". Lowercase only.
+#workshop=\"\"
+# To enable serverside mods, remove the # below and list the Mods like this: \"@servermod1;@server mod2\". Lowercase only.
+servermods=\"$SERVER_MODLIST\"
+
+# modify carefully! server won't start if syntax is corrupt!
+dayzparameter=\" -config=\${config} -port=\${port} -freezecheck \${BEpath} \${profiles} \${logs}\""
+
+# Check if the config.ini file exists.
+if [ ! -f "$CONFIG_FILE" ]; then
+    printf "[ ${yellow}Warning${default} ] ${CONFIG_FILE} file not found.\n"
+    echo -e "$DEFAULT_CONFIG" > "$CONFIG_FILE"
+    printf "[ ${green}Fixed${default} ] Default ${lightyellow}${CONFIG_FILE}${default} created.\n"
+else
+    printf "[ ${green}Success${default} ] Config file found. Reading values...\n"
+    # Source the config file to load its variables
+    source "$CONFIG_FILE"
+    printf "[ ${green}Finished${default} ] Configuration file loaded.\n"
+fi
+
+
+
+# Install, configure and start server
+/bin/su -c "/opt/dayz_server/dayzserver.sh -i" - $SERVICE_USER #Install
+
+#Replace mission details after install
+#Change mapname
+grep -rl 'template="dayzOffline.chernarusplus"' $SERVER_PATH/serverDZ.cfg | xargs sed -i "s/template=\"dayzOffline.chernarusplus\"/template=\"$MISSION\"/g"
+
+#Change hostname
+grep -rl '"EXAMPLE NAME"' $SERVER_PATH/serverDZ.cfg | xargs sed -i "s/\"EXAMPLE NAME\"/\"Flotedayrusen\"/g"
+
+#Disable 3rd person
+grep -rl 'disable3rdPerson=0' $SERVER_PATH/serverDZ.cfg | xargs sed -i "s/"disable3rdPerson=0"/"disable3rdPerson=1"/g"
+
+/bin/su -c "/opt/dayz_server/dayzserver.sh -ws" - $SERVICE_USER #Configure mods
+/bin/su -c "/opt/dayz_server/dayzserver.sh -st" - $SERVICE_USER #Start

@@ -5,32 +5,6 @@
 ### Modified by haywardgg
 #############################################
 
-OPTIND=1         # Reset in case getopts has been used previously in the shell.
-A=""
-B=""
-C=""
-D=""
-E=""
-F=""
-G=""
-H=""
-I=""
-
-while getopts ":A:B:C:D:E:F:G:H:I:" opt; do
-  case ${opt} in
-    A ) STEAM_USERNAME=$OPTARG;;
-    B ) STEAM_PASSWORD=$OPTARG;;
-	C ) ADMIN__STEAM_USER_IDS=$OPTARG;;
-    D ) SERVER_MAP=$OPTARG;;
-    E ) SERVER_EDITION=$OPTARG;;
-    F ) SERVER_MODLIST=$OPTARG;;
-    G ) SERVER_IP=$OPTARG;;
-    H ) ADMIN_DISCORD_WEBHOOK=$OPTARG;;
-    I ) SERVER_DISCORD_WEBHOOK=$OPTARG;;
-    \? ) echo "Usage: script [-A STEAM_USERNAME] [-B STEAM_PASSWORD] [-C ADMIN__STEAM_USER_IDS] [-D SERVER_MAP] [-E SERVER_EDITION] [-F SERVER_MODLIST] [-G SERVER_IP] [-H ADMIN_DISCORD_WEBHOOK] [-I SERVER_DISCORD_WEBHOOK]";;
-  esac
-done
-
 ### NO NEED TO EDIT ANYTHING IN THIS FILE ###
 ### Changes should be made in config.ini ###
 
@@ -55,97 +29,10 @@ CONFIG_FILE="/opt/dayz_server/config.ini"
 # Define Server folder location
 SERVER_PATH="/opt/dayz_server/serverfiles"
 
-# Variable substitutions/convertions from provisioning script parameters
+# Source the config file to load its variables
+source "$CONFIG_FILE"
+printf "[ ${green}Finished${default} ] Configuration file loaded.\n"
 
-# Set the branch to run
-#stable=223350
-#exp_branch=1042420
-if [[ $SERVER_EDITION = "Stable" ]]
-then
-	BRANCH="223350"
-elif [[ $SERVER_EDITION = "Experimental" ]]
-then
-	BRANCH="1042420"
-fi
-
-# Set the map to run, if an unexpected value is passed default to Chernarus
-case "$SERVER_MAP" in
-    "Chernarus") MISSION="dayzOffline.chernarusplus";;
-    "Livonia") MISSION="dayzOffline.enoch";;
-	"Sakhal") MISSION="dayzOffline.sakhal";;
-    *) MISSION="dayzOffline.chernarusplus";;
-esac
-
-# Set VPPAdminTool permissions
-ADMINLIST_DELIM=":"
-ADMINLIST_OUTPUTFILE="/profiles/VPPAdminTools/Permissions/SuperAdmins/SuperAdmins.txt"
-ADMINLIST_PASSWORDFILE="/profiles/VPPAdminTools/Permissions/Credentials.txt"
-
-# Save original IFS
-OIFS=$IFS
-# Set IFS to the delimiter
-IFS=$ADMINLIST_DELIM
-
-# Split the string and loop through parts
-#for part in $ADMIN__STEAM_USER_IDS; do
-#    echo "$part" >> "$ADMINLIST_OUTPUTFILE"
-#done
-
-# Restore IFS
-IFS=$OIFS
-
-
-# Define the mod list
-MOD_LIST=""
-
-# Replace delims in server mod list
-SERVER_MODLIST="${SERVER_MODLIST//:/;}"
-
-# Default content of the config.ini file
-DEFAULT_CONFIG="
-# DayZ SteamID
-appid=\"$BRANCH\"
-dayz_id=221100
-#stable=223350
-#exp_branch=1042420
-
-# Game Port (Not Steam QueryPort. Add/Change that in your serverDZ.cfg file)
-port=2301
-
-# IMPORTANT PARAMETERS
-steamloginuser=\"$STEAM_USERNAME\"
-steamloginpassword=\"$STEAM_PASSWORD\"
-config=serverDZ.cfg
-BEpath=\"-BEpath=$SERVER_PATH/serverfiles/battleye/\"
-profiles=\"-profiles=$SERVER_PATH/serverprofile/\"
-# optional - just remove the # to enable
-#logs=\"-dologs -adminlog -netlog\"
-
-# Discord Notifications.
-discord_webhook_url=\"$SERVER_DISCORD_WEBHOOK\"
-discord_webhook_admin_url=\"$ADMIN_DISCORD_WEBHOOK\"
-
-# DayZ Mods from Steam Workshop
-# Edit the workshop.cfg and add one Mod Number per line.
-# To enable mods, remove the # below and list the Mods like this: \"@mod1;@mod2;@spaces work\". Lowercase only.
-#workshop=\"\"
-# To enable serverside mods, remove the # below and list the Mods like this: \"@servermod1;@server mod2\". Lowercase only.
-servermods=\"$SERVER_MODLIST\"
-
-# modify carefully! server won't start if syntax is corrupt!
-dayzparameter=\" -config=\${config} -port=\${port} -freezecheck \${BEpath} \${profiles} \${logs}\""
-
-# Check if the config.ini file exists.
-if [ ! -f "$CONFIG_FILE" ]; then
-    printf "[ ${yellow}Warning${default} ] ${CONFIG_FILE} file not found.\n"
-    echo -e "$DEFAULT_CONFIG" > "$CONFIG_FILE"
-    printf "[ ${green}Fixed${default} ] Default ${lightyellow}${CONFIG_FILE}${default} created.\n"
-else
-    printf "[ ${green}Success${default} ] Config file found. Reading values...\n"
-    # Source the config file to load its variables
-    source "$CONFIG_FILE"
-    printf "[ ${green}Finished${default} ] Configuration file loaded.\n"
-fi
 
 fn_send_admin_login_notification(){
 	# Send Discord Admin login notification if URL is set
@@ -156,6 +43,27 @@ fn_send_admin_login_notification(){
 	fi
 }
 
+fn_add_vvpadmin_config(){
+# Set VPPAdminTool permissions
+ADMINLIST=${admin_list}
+ADMINLIST_DELIM=":"
+ADMINLIST_OUTPUTFILE="$SERVER_PATH/serverprofile/VPPAdminTools/Permissions/SuperAdmins/SuperAdmins.txt"
+ADMINLIST_PASSWORDFILE="$SERVER_PATH/serverprofile/VPPAdminTools/Permissions/Credentials.txt"
+
+# Save original IFS
+OIFS=$IFS
+# Set IFS to the delimiter
+IFS=$ADMINLIST_DELIM
+
+# Split the string and loop through parts
+for part in $ADMINLIST; do
+    echo "$part" >> "$ADMINLIST_OUTPUTFILE"
+done
+
+# Restore IFS
+IFS=$OIFS
+}
+
 fn_get_serverlist_DZSAL(){
 	#pwsh -command "(Invoke-RestMethod -Method Get -Uri 'dayzsalauncher.com/api/v2/launcher/servers/dayz').result.endpoint.ip -contains '108.143.148.177'"
 	serverListRequest=`curl -H "Content-Type: application/json" -X GET "https://dayzsalauncher.com/api/v2/launcher/servers/dayz"`
@@ -164,7 +72,7 @@ fn_get_serverlist_DZSAL(){
 fn_add_server_DZSAL(){
 	# Send API call to add server to DZSAL if it is provided
 	if [ -n "$SERVER_IP" ]; then
-		curl -H "Content-Type: application/json" -X GET "https://dayzsalauncher.com/api/v1/query/$SERVER_IP:27016"
+		curl -H "Content-Type: application/json" -X GET "https://dayzsalauncher.com/api/v1/query/${server_IP}:27016"
 	else
 		echo ""
 	fi
