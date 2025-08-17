@@ -56,10 +56,10 @@ SERVER_PATH="/opt/dayz_server/serverfiles"
 # Set the branch to run
 #stable=223350
 #exp_branch=1042420
-if [[ $SERVER_MAP = "Stable" ]]
+if [[ $SERVER_EDITION = "Stable" ]]
 then
 	BRANCH="223350"
-elif [[ $SERVER_MAP = "Experimental" ]]
+elif [[ $SERVER_EDITION = "Experimental" ]]
 then
 	BRANCH="1042420"
 fi
