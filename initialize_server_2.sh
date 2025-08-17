@@ -75,6 +75,9 @@ fi
 sudo mkdir -m 777 /opt/dayz_server/
 sudo mkdir -m 777 /opt/dayz_server/serverfiles/
 
+#Create account for the server service account
+sudo useradd -p $(openssl passwd -1 $DAYZ_SERVER_USER_PASSWORD) $SERVICE_USER -m -d /home/$SERVICE_USER
+
 #Create group, the add members and permissions to the server dir
 sudo groupadd dayz_server
 sudo usermod -aG dayz_server $SERVICE_USER
@@ -82,9 +85,6 @@ sudo usermod -aG dayz_server $ADMIN_USER
 
 sudo chgrp -R dayz_server /opt/dayz_server/
 sudo chmod -R g+rwX /opt/dayz_server/
-
-#Create account for the server service account
-sudo useradd -p $(openssl passwd -1 $DAYZ_SERVER_USER_PASSWORD) $SERVICE_USER -m -d /home/$SERVICE_USER
 
 #Download content
 wget -O /opt/dayz_server/dayzserver.sh https://raw.githubusercontent.com/Lsvingen/DayZ_Server_Management/refs/heads/main/dayzserver.sh
