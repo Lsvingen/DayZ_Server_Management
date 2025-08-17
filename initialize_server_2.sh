@@ -190,17 +190,17 @@ fi
 
 
 # Install, configure and start server
-/bin/su -c "/opt/dayz_server/dayzserver.sh -i" - $SERVICE_USER #Install
+#/bin/su -c "/opt/dayz_server/dayzserver.sh -i" - $SERVICE_USER #Install
 
 #Replace mission details after install
 #Change mapname
-grep -rl 'template="dayzOffline.chernarusplus"' $SERVER_PATH/serverDZ.cfg | xargs sed -i "s/template=\"dayzOffline.chernarusplus\"/template=\"$MISSION\"/g"
+#grep -rl 'template="dayzOffline.chernarusplus"' $SERVER_PATH/serverDZ.cfg | xargs sed -i "s/template=\"dayzOffline.chernarusplus\"/template=\"$MISSION\"/g"
 
 #Change hostname
-grep -rl '"EXAMPLE NAME"' $SERVER_PATH/serverDZ.cfg | xargs sed -i "s/\"EXAMPLE NAME\"/\"$server_name\"/g"
+#grep -rl '"EXAMPLE NAME"' $SERVER_PATH/serverDZ.cfg | xargs sed -i "s/\"EXAMPLE NAME\"/\"$server_name\"/g"
 
 #Disable 3rd person
-grep -rl 'disable3rdPerson=0' $SERVER_PATH/serverDZ.cfg | xargs sed -i "s/"disable3rdPerson=0"/"disable3rdPerson=1"/g"
+#grep -rl 'disable3rdPerson=0' $SERVER_PATH/serverDZ.cfg | xargs sed -i "s/"disable3rdPerson=0"/"disable3rdPerson=1"/g"
 
-/bin/su -c "/opt/dayz_server/dayzserver.sh -ws" - $SERVICE_USER #Configure mods
-/bin/su -c "/opt/dayz_server/dayzserver.sh -st" - $SERVICE_USER #Start
+#/bin/su -c "/opt/dayz_server/dayzserver.sh -ws" - $SERVICE_USER #Configure mods
+#/bin/su -c "/opt/dayz_server/dayzserver.sh -st" - $SERVICE_USER #Start
