@@ -49,6 +49,9 @@ az login --identity
 STEAM_USERNAME=`az keyvault secret show --vault-name "priv-keyvault" --name "SteamUsername" --query value | tr -d '"'`
 STEAM_PASSWORD=`az keyvault secret show --vault-name "priv-keyvault" --name "SteamPassword" --query value | tr -d '"'`
 
+ADMIN_WEBHOOK_URL=`az keyvault secret show --vault-name "priv-keyvault" --name "DiscordAdminNotificationsWebhook" --query value | tr -d '"'`
+SERVER_WEBHOOK_URL=`az keyvault secret show --vault-name "priv-keyvault" --name "DiscordServerNotificationsWebhook" --query value | tr -d '"'`
+
 # Get the password to use for the Service Account running the server
 DAYZ_SERVER_USER_PASSWORD=`az keyvault secret show --vault-name "priv-keyvault" --name "ServiceAccountPassword" --query value | tr -d '"'`
 #dayz_server_user_password=`pwsh -command 'Connect-AzAccount -Identity | Out-Null; Get-AzKeyVaultSecret -VaultName "priv-keyvault" -Name "ServiceAccountPassword" -AsPlainText'`

@@ -13,8 +13,10 @@ D=""
 E=""
 F=""
 G=""
+H=""
+I=""
 
-while getopts ":A:B:C:D:E:F:G:" opt; do
+while getopts ":A:B:C:D:E:F:G:H:I:" opt; do
   case ${opt} in
     A ) STEAM_USERNAME=$OPTARG;;
     B ) STEAM_PASSWORD=$OPTARG;;
@@ -23,7 +25,9 @@ while getopts ":A:B:C:D:E:F:G:" opt; do
     E ) SERVER_EDITION=$OPTARG;;
     F ) SERVER_MODLIST=$OPTARG;;
     G ) SERVER_IP=$OPTARG;;
-    \? ) echo "Usage: script [-A STEAM_USERNAME] [-B STEAM_PASSWORD] [-C ADMIN__STEAM_USER_IDS] [-D SERVER_MAP] [-E SERVER_EDITION] [-F SERVER_MODLIST] [-G SERVER_IP]";;
+    H ) ADMIN_DISCORD_WEBHOOK=$OPTARG;;
+    I ) SERVER_DISCORD_WEBHOOK=$OPTARG;;
+    \? ) echo "Usage: script [-A STEAM_USERNAME] [-B STEAM_PASSWORD] [-C ADMIN__STEAM_USER_IDS] [-D SERVER_MAP] [-E SERVER_EDITION] [-F SERVER_MODLIST] [-G SERVER_IP] [-H ADMIN_DISCORD_WEBHOOK] [-I SERVER_DISCORD_WEBHOOK]";;
   esac
 done
 
@@ -118,8 +122,8 @@ profiles=\"-profiles=$SERVER_PATH/serverprofile/\"
 #logs=\"-dologs -adminlog -netlog\"
 
 # Discord Notifications.
-discord_webhook_url=\"\"
-discord_webhook_admin_url=\"\"
+discord_webhook_url=\"$SERVER_DISCORD_WEBHOOK\"
+discord_webhook_admin_url=\"$ADMIN_DISCORD_WEBHOOK\"
 
 # DayZ Mods from Steam Workshop
 # Edit the workshop.cfg and add one Mod Number per line.
