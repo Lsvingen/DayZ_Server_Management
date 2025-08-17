@@ -358,7 +358,6 @@ fn_workshop_mods(){
     # If .workshop.cfg doesn't exist, create it.
     if [ ! -f "$workshop_cfg" ]; then
         touch $workshop_cfg
-	chmod 600 ${SERVER_PATH}/workshop.cfg
     fi
 
     # Read the updated workshop.cfg into workshopID array
