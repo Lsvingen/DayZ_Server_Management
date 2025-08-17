@@ -140,7 +140,7 @@ dayz_id=221100
 port=2301
 
 # Server IP
-server_IP=\"$SERVER_IP\"
+server_ip=\"$SERVER_IP\"
 
 # Server name
 server_name="Flotedayrusen"
