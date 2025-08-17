@@ -90,4 +90,4 @@ sudo chgrp -R dayz_server /opt/dayz_server/
 sudo chmod -R g+rwxs /opt/dayz_server/
 
 # Run script in different context from root, as the service user
-/bin/su -c "/opt/dayz_server/dayzserver.sh -a $STEAM_USERNAME -b $STEAM_PASSWORD -c $ADMIN_STEAM_USER_IDS -d $SERVER_MAP -e $SERVER_EDITION -f $SERVER_MODLIST -g $SERVER_IP" - $SERVICE_USER
+/bin/su -c "/opt/dayz_server/dayzserver.sh -A $STEAM_USERNAME -B $STEAM_PASSWORD -C $ADMIN_STEAM_USER_IDS -D $SERVER_MAP -E $SERVER_EDITION -F $SERVER_MODLIST -G $SERVER_IP" - $SERVICE_USER

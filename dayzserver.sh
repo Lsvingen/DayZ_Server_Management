@@ -73,7 +73,7 @@ case "$SERVER_MAP" in
 esac
 
 # Set VPPAdminTool permissions
-ADMINLIST_DELIM=";"
+ADMINLIST_DELIM=":"
 ADMINLIST_OUTPUTFILE="/profiles/VPPAdminTools/Permissions/SuperAdmins/SuperAdmins.txt"
 ADMINLIST_PASSWORDFILE="/profiles/VPPAdminTools/Permissions/Credentials.txt"
 
@@ -93,6 +93,9 @@ IFS=$OIFS
 
 # Define the mod list
 MOD_LIST=""
+
+# Replace delims in server mod list
+SERVER_MODLIST="${SERVER_MODLIST//:/;}"
 
 # Default content of the config.ini file
 DEFAULT_CONFIG="
