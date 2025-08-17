@@ -136,13 +136,11 @@ if [ ! -f "$CONFIG_FILE" ]; then
     printf "[ ${yellow}Warning${default} ] ${CONFIG_FILE} file not found.\n"
     echo -e "$DEFAULT_CONFIG" > "$CONFIG_FILE"
     printf "[ ${green}Fixed${default} ] Default ${lightyellow}${CONFIG_FILE}${default} created.\n"
-    chmod 600 "$CONFIG_FILE"
 else
     printf "[ ${green}Success${default} ] Config file found. Reading values...\n"
     # Source the config file to load its variables
     source "$CONFIG_FILE"
     printf "[ ${green}Finished${default} ] Configuration file loaded.\n"
-    chmod 600 "$CONFIG_FILE"
 fi
 
 fn_send_admin_login_notification(){
