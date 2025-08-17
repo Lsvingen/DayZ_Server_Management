@@ -14,7 +14,7 @@ F=""
 G=""
 H=""
 
-while getopts ":A:B:C:D:E:F:G:" opt; do
+while getopts ":A:B:C:D:E:F:G:H:" opt; do
   case ${opt} in
     A ) SERVICE_USER=$OPTARG;;
     B ) ADMIN_USER=$OPTARG;;
