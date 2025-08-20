@@ -52,7 +52,27 @@ fn_send_server_notification(){
 	fi
 }
 
-fn_add_vvpadmin_config(){
+fn_add_workshop_mod_config(){
+# Set VPPAdminTool permissions
+MODLIST=${servermods}
+MODLIST_DELIM=":"
+MODLIST_OUTPUTFILE="$SERVER_PATH/workshop.cfg"
+
+# Save original IFS
+OIFS=$IFS
+# Set IFS to the delimiter
+IFS=$MODLIST_DELIM
+
+# Split the string and loop through parts
+for part in $MODLIST; do
+    echo "${part//@/}" >> "$MODLIST_OUTPUTFILE"
+done
+
+# Restore IFS
+IFS=$OIFS
+}
+
+fn_add_vppadmin_config(){
 # Set VPPAdminTool permissions
 ADMINLIST=${admin_list}
 ADMINLIST_DELIM=":"
@@ -355,9 +375,10 @@ fn_workshop_mods(){
     timestamp_file="${SERVER_PATH}/mod_timestamps.json"
     workshop_cfg="${SERVER_PATH}/workshop.cfg"
     
-    # If .workshop.cfg doesn't exist, create it.
+    # If .workshop.cfg doesn't exist, create it and add the mod config
     if [ ! -f "$workshop_cfg" ]; then
         touch $workshop_cfg
+		fn_add_workshop_mod_config
     fi
 
     # Read the updated workshop.cfg into workshopID array
