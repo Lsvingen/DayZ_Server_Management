@@ -8,6 +8,6 @@ sudo snap install powershell --classic
 
 # Install PowerShell modules for administration
 sudo powershell -command "Install-Module Az -Force"
-sudo powershell -command "Install-Module Graph.Beta -Force"
+sudo powershell -command "Install-Module Microsoft.Graph.Beta -Force"
 sudo powershell -command "Install-Module ExchangeOnlineManagement -Force"
 sudo powershell -command "Install-Module MicrosoftTeams -Force"
