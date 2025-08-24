@@ -4,4 +4,4 @@
 # Install dependencies
 sudo apt install openssh-server -y
 sudo apt install lib32gcc-s1 -y
-sudo apt install powershell -y
+sudo snap install powershell --classic
