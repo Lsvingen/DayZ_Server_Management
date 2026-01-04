@@ -102,10 +102,9 @@ export AZCOPY_AUTO_LOGIN_TYPE=MSI
 azcopy copy 'https://tempsoftshare01.blob.core.windows.net/steamaccount2fafiles/maFiles/*' '/opt/steamguard-files/'
 
 #Create folders for steamguard data and copy files
-sudo mkdir -m 777 /root/.config/
-sudo mkdir -m 777 /root/.config/steamguard-cli/
-sudo mkdir -m 777 /root/.config/steamguard-cli/maFiles/
-
+# THIS DOES NOT SEEM TO WORK AT THE MOMENT
+#
+sudo mkdir -p -m 777 /root/.config/steamguard-cli/maFiles/
 sudo mv /opt/steamguard-files/* /root/.config/steamguard-cli/maFiles/
 
 #Create account for the server service account
