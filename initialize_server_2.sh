@@ -106,7 +106,7 @@ sudo mkdir -m 777 /root/.config/
 sudo mkdir -m 777 /root/.config/steamguard-cli/
 sudo mkdir -m 777 /root/.config/steamguard-cli/maFiles/
 
-sudo mv /opt/steamguard-files/* /root/.config/steamguard-cli/maFiles
+sudo mv /opt/steamguard-files/* /root/.config/steamguard-cli/maFiles/
 
 #Create account for the server service account
 sudo useradd -p $(openssl passwd -1 $DAYZ_SERVER_USER_PASSWORD) $SERVICE_USER -m -d /home/$SERVICE_USER
