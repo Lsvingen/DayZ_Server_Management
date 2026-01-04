@@ -33,6 +33,7 @@ done
 # Install dependencies
 sudo apt install openssh-server -y
 sudo apt install lib32gcc-s1 -y
+sudo apt install azcopy
 #snap install powershell --classic
 
 # Install Powershell modules required for access to keyvault
@@ -77,9 +78,15 @@ fi
 #Create directories
 sudo mkdir -m 777 /opt/dayz_server/
 sudo mkdir -m 777 /opt/dayz_server/serverfiles/
+sudo mkdir -m 777 /opt/steamguard-cli/
 
 #Download content
 wget -O /opt/dayz_server/dayzserver.sh https://raw.githubusercontent.com/Lsvingen/DayZ_Server_Management/refs/heads/main/dayzserver.sh
+wget -O /opt/dayz_server/steamguard-cli_0.17.1-0.deb https://github.com/dyc3/steamguard-cli/releases/download/v0.17.1/steamguard-cli_0.17.1-0.deb
+
+#Install SteamGuard-CLI
+#Can't be bothered to dynamically get the latest version now
+sudo dpkg -i ./steamguard-cli_0.17.1-0.deb
 
 #Create account for the server service account
 sudo useradd -p $(openssl passwd -1 $DAYZ_SERVER_USER_PASSWORD) $SERVICE_USER -m -d /home/$SERVICE_USER
@@ -202,5 +209,5 @@ grep -rl '"EXAMPLE NAME"' $SERVER_PATH/serverfiles/serverDZ.cfg | xargs sed -i "
 #Disable 3rd person
 grep -rl 'disable3rdPerson=0' $SERVER_PATH/serverfiles/serverDZ.cfg | xargs sed -i "s/"disable3rdPerson=0"/"disable3rdPerson=1"/g"
 
-/bin/su -c "/opt/dayz_server/dayzserver.sh ws" - $SERVICE_USER #Configure mods
-/bin/su -c "/opt/dayz_server/dayzserver.sh st" - $SERVICE_USER #Start
+#/bin/su -c "/opt/dayz_server/dayzserver.sh ws" - $SERVICE_USER #Configure mods
+#/bin/su -c "/opt/dayz_server/dayzserver.sh st" - $SERVICE_USER #Start

@@ -1,0 +1,22 @@
+https://github.com/dyc3/steamguard-cli?tab=readme-ov-file
+https://github.com/dyc3/steamguard-cli/blob/master/docs/quickstart.md
+
+wget https://github.com/dyc3/steamguard-cli/releases/download/v0.17.1/steamguard
+
+sudo dpkg -i ./steamguard-cli_<version>_amd64.deb
+
+move 2fa files to
+/root/.config/steamguard-cli/maFiles/
+
+from
+https://tempsoftshare01.blob.core.windows.net/steamaccount2fafiles
+
+# Get code and login
+code=`steamguard -v error`
+./steamcmd.sh +login "${STEAM_USERNAME}" "${STEAM_PASSWORD}" "${code}"
+
+Other Linux
+Download steamguard from the releases page
+Make it executable, and move steamguard to /usr/local/bin or any other directory in your $PATH.
+chmod +x ./steamguard
+sudo mv ./steamguard /usr/local/bin
