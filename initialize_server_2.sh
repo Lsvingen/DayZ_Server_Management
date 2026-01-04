@@ -79,14 +79,34 @@ fi
 sudo mkdir -m 777 /opt/dayz_server/
 sudo mkdir -m 777 /opt/dayz_server/serverfiles/
 sudo mkdir -m 777 /opt/steamguard-cli/
+sudo mkdir -m 777 /opt/steamguard-files/
+
 
 #Download content
 wget -O /opt/dayz_server/dayzserver.sh https://raw.githubusercontent.com/Lsvingen/DayZ_Server_Management/refs/heads/main/dayzserver.sh
-wget -O /opt/dayz_server/steamguard-cli_0.17.1-0.deb https://github.com/dyc3/steamguard-cli/releases/download/v0.17.1/steamguard-cli_0.17.1-0.deb
+wget -O /opt/steamguard-cli/steamguard-cli_0.17.1-0.deb https://github.com/dyc3/steamguard-cli/releases/download/v0.17.1/steamguard-cli_0.17.1-0.deb
+sudo curl -sSL -O https://packages.microsoft.com/config/ubuntu/24.04/packages-microsoft-prod.deb
 
 #Install SteamGuard-CLI
 #Can't be bothered to dynamically get the latest version now
-sudo dpkg -i ./steamguard-cli_0.17.1-0.deb
+sudo dpkg -i /opt/steamguard-cli/steamguard-cli_0.17.1-0.deb
+
+#Add Microsoft package repository info
+sudo dpkg -i packages-microsoft-prod.deb
+rm packages-microsoft-prod.deb
+sudo apt update
+sudo apt install azcopy
+
+#Configure azcopy and download blob data
+export AZCOPY_AUTO_LOGIN_TYPE=MSI
+azcopy copy 'https://tempsoftshare01.blob.core.windows.net/steamaccount2fafiles/maFiles/*' '/opt/steamguard-files/'
+
+#Create folders for steamguard data and copy files
+sudo mkdir -m 777 /root/.config/
+sudo mkdir -m 777 /root/.config/steamguard-cli/
+sudo mkdir -m 777 /root/.config/steamguard-cli/maFiles/
+
+sudo mv /opt/steamguard-files/* /root/.config/steamguard-cli/maFiles
 
 #Create account for the server service account
 sudo useradd -p $(openssl passwd -1 $DAYZ_SERVER_USER_PASSWORD) $SERVICE_USER -m -d /home/$SERVICE_USER
