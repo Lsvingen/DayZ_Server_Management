@@ -54,7 +54,7 @@ ADMIN_WEBHOOK_URL=`az keyvault secret show --vault-name "priv-keyvault" --name "
 SERVER_WEBHOOK_URL=`az keyvault secret show --vault-name "priv-keyvault" --name "DiscordServerNotificationsWebhook" --query value | tr -d '"'`
 
 # Get the password to use for the Service Account running the server
-DAYZ_SERVER_USER_PASSWORD=`az keyvault secret show --vault-name "priv-keyvault" --name "ServiceAccountPassword" --query value | tr -d '"'`
+DAYZ_SERVICE_USER_PASSWORD=`az keyvault secret show --vault-name "priv-keyvault" --name "ServiceAccountPassword" --query value | tr -d '"'`
 #dayz_server_user_password=`pwsh -command 'Connect-AzAccount -Identity | Out-Null; Get-AzKeyVaultSecret -VaultName "priv-keyvault" -Name "ServiceAccountPassword" -AsPlainText'`
 
 # Get the password for the Admin account during provisioning, and add it to the keyvault for reference.
@@ -102,7 +102,7 @@ export AZCOPY_AUTO_LOGIN_TYPE=MSI
 azcopy copy 'https://tempsoftshare01.blob.core.windows.net/steamaccount2fafiles/maFiles/*' '/opt/steamguard-files/'
 
 #Create account for the server service account
-sudo useradd -p $(openssl passwd -1 $DAYZ_SERVER_USER_PASSWORD) $SERVICE_USER -m -d /home/$SERVICE_USER
+sudo useradd -p $(openssl passwd -1 $DAYZ_SERVICE_USER_PASSWORD) $SERVICE_USER -m -d /home/$SERVICE_USER
 
 #Create group, the add members and permissions to the server dir
 sudo groupadd dayz_server
@@ -120,8 +120,11 @@ CONFIG_FILE="/opt/dayz_server/config.ini"
 SERVER_PATH="/opt/dayz_server/serverfiles"
 
 #Create folders for steamguard data and copy files
-sudo mkdir -p -m 777 /home/$SERVICE_USER/.config/steamguard-cli/maFiles/
-sudo mv /opt/steamguard-files/* /home/$SERVICE_USER/.config/steamguard-cli/maFiles/
+sudo mkdir -p -m 777 /root/.config/steamguard-cli/maFiles/
+sudo mv /opt/steamguard-files/* /root/.config/steamguard-cli/maFiles/
+
+#Dirty hack to sudoers to allow running steamguard as root from the service user, otherwise errors...
+sudo echo "dayz-svc-user ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/90-cloud-init-users
 
 
 # Variable substitutions/convertions from provisioning script parameters

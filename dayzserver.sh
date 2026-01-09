@@ -34,7 +34,7 @@ source "$CONFIG_FILE"
 printf "[ ${green}Finished${default} ] Configuration file loaded.\n"
 
 fn_get_steamguard_code() {
-		code=`steamguard -v error`
+		code=`sudo -u root "steamguard" "-v" "error"`
 		}
 
 
