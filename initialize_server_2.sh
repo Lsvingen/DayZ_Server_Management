@@ -101,12 +101,6 @@ sudo apt install azcopy
 export AZCOPY_AUTO_LOGIN_TYPE=MSI
 azcopy copy 'https://tempsoftshare01.blob.core.windows.net/steamaccount2fafiles/maFiles/*' '/opt/steamguard-files/'
 
-#Create folders for steamguard data and copy files
-# THIS DOES NOT SEEM TO WORK AT THE MOMENT
-#
-sudo mkdir -p -m 777 /root/.config/steamguard-cli/maFiles/
-sudo mv /opt/steamguard-files/* /root/.config/steamguard-cli/maFiles/
-
 #Create account for the server service account
 sudo useradd -p $(openssl passwd -1 $DAYZ_SERVER_USER_PASSWORD) $SERVICE_USER -m -d /home/$SERVICE_USER
 
@@ -125,6 +119,9 @@ CONFIG_FILE="/opt/dayz_server/config.ini"
 # Define Server folder location
 SERVER_PATH="/opt/dayz_server/serverfiles"
 
+#Create folders for steamguard data and copy files
+sudo mkdir -p -m 777 /home/$SERVICE_USER/.config/steamguard-cli/maFiles/
+sudo mv /opt/steamguard-files/* /home/$SERVICE_USER/.config/steamguard-cli/maFiles/
 
 
 # Variable substitutions/convertions from provisioning script parameters

@@ -33,6 +33,10 @@ SERVER_PATH="/opt/dayz_server/serverfiles"
 source "$CONFIG_FILE"
 printf "[ ${green}Finished${default} ] Configuration file loaded.\n"
 
+fn_get_steamguard_code() {
+		code=`steamguard -v error`
+		}
+
 
 fn_send_admin_login_notification(){
 	# Send Discord Admin login notification if URL is set
