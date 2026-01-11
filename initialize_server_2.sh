@@ -103,7 +103,7 @@ sudo apt install azcopy
 #Issue: https://github.com/Azure/azure-storage-azcopy/issues/2321
 if [[ 0 = 0 ]]; then
 export AZCOPY_AUTO_LOGIN_TYPE=MSI
-sudo azcopy copy 'https://tempsoftshare01.blob.core.windows.net/steamaccount2fafiles/maFiles/*' '/opt/steamguard-files/' || true
+#sudo azcopy copy 'https://tempsoftshare01.blob.core.windows.net/steamaccount2fafiles/maFiles/*' '/opt/steamguard-files/' || true
 fi
 
 #Create account for the server service account
