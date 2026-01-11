@@ -98,13 +98,9 @@ sudo apt update
 sudo apt install azcopy
 
 #Configure azcopy and download blob data
-#Issue with azcopy stopping further execution seems to be a bug, open GH issue below
-#Testing with dummy if-fi block to mitigate
-#Issue: https://github.com/Azure/azure-storage-azcopy/issues/2321
-if [[ 0 = 0 ]]; then
-export AZCOPY_AUTO_LOGIN_TYPE=MSI
-/bin/su -c "azcopy copy "https://tempsoftshare01.blob.core.windows.net/steamaccount2fafiles/maFiles/*" "/opt/steamguard-files/" || true'" - root
-fi
+wget -O /opt/azcopy.sh https://raw.githubusercontent.com/Lsvingen/DayZ_Server_Management/refs/heads/main/azcopy.sh
+chmod +x /opt/azcopy.sh
+sudo /opt/azcopy.sh || true
 
 #Create account for the server service account
 sudo useradd -p $(openssl passwd -1 $DAYZ_SERVICE_USER_PASSWORD) $SERVICE_USER -m -d /home/$SERVICE_USER
