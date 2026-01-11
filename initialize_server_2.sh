@@ -98,8 +98,8 @@ sudo apt update
 sudo apt install azcopy
 
 #Configure azcopy and download blob data
-#export AZCOPY_AUTO_LOGIN_TYPE=MSI
-#azcopy copy 'https://tempsoftshare01.blob.core.windows.net/steamaccount2fafiles/maFiles/*' '/opt/steamguard-files/' || true
+export AZCOPY_AUTO_LOGIN_TYPE=MSI
+azcopy copy 'https://tempsoftshare01.blob.core.windows.net/steamaccount2fafiles/maFiles/*' '/opt/steamguard-files/' &> /dev/null
 
 #Create account for the server service account
 sudo useradd -p $(openssl passwd -1 $DAYZ_SERVICE_USER_PASSWORD) $SERVICE_USER -m -d /home/$SERVICE_USER
